@@ -1,0 +1,32 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = 'studentmanager'
+    version = '0.0.1'
+    manifest {
+        attributes "Manifest-Version": 1.0,
+                'Main-Class': 'com.example.studentmanager.StudentmanagerApplication'
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
+    implementation 'com.auth0:java-jwt:3.8.1'
+    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.12'
+    runtimeOnly 'mysql:mysql-connector-java'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

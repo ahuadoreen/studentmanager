@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mappper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.studentmanager.mapper.TeacherMapper">
+    <resultMap id="teacher" type="com.example.studentmanager.entity.Teacher">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
+        <result property="subjectIds" column="subjectId"/>
+        <result property="subjectNames" column="subjectName"/>
+    </resultMap>
+    <select id="findTeachers" resultMap="teacher">
+        select
+        T.id,
+        T.name,
+        T.gender,
+        T.age,
+        group_concat(S.id) subjectId,
+        group_concat(S.name) subjectName
+        from teacher T
+        left join teacher_subject TS on T.id = TS.teacher_id
+        left join subject S on S.id = TS.subject_id where T.name like CONCAT('%',#{name},'%') group by T.id
+    </select>
+    <insert id="insertTeacher" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher (name,gender,age) values(#{teacher.name},#{teacher.gender},#{teacher.age})
+    </insert>
+    <insert id="insertTeacherSubjectRelation">
+        insert into teacher_subject (teacher_id,subject_id) values(#{teacherId},#{subjectId})
+    </insert>
+    <update id="updateTeacher">
+        update teacher
+        <set>
+            <if test="teacher.name != ''">name = #{teacher.name},</if>
+            <if test="teacher.gender != ''">gender = #{teacher.gender},</if>
+            <if test="teacher.age != ''">age = #{teacher.age}</if>
+        </set>
+        where id = #{teacher.id}
+    </update>
+    <delete id="deleteTeacherSubjectRelation">
+        delete from teacher_subject where teacher_id = #{teacherId}
+    </delete>
+    <delete id="deleteTeacher">
+        delete from teacher where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mappper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.studentmanager.mapper.ClassMapper">
+    <resultMap id="class" type="com.example.studentmanager.entity.Classes">
+        <id property="id" column="id"/>
+        <result property="className" column="class_name"/>
+        <result property="grade" column="grade"/>
+        <association property="mainTeacher" resultMap="teacher" />
+    </resultMap>
+    <resultMap id="subject" type="com.example.studentmanager.entity.Subject">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <resultMap id="teacher" type="com.example.studentmanager.entity.Teacher">
+        <id property="id" column="teacherId"/>
+        <result property="name" column="teacherName"/>
+    </resultMap>
+    <select id="findClasses" resultMap="class">
+        select
+        C.id,
+        C.class_name,
+        C.grade,
+        T.id teacherId,
+        T.name teacherName
+        from class C
+        left join teacher T on C.main_teacher = T.id where T.name like CONCAT('%',#{name},'%')
+    </select>
+    <select id="findCoursesByGrade" resultMap="subject">
+        select S.id,S.name from subject S left join grade_course GC on S.id = GC.subject where GC.grade = #{grade}
+    </select>
+    <select id="findClassCourseTeacher" resultMap="teacher">
+        select T.id teacherId,T.name teacherName from teacher T left join class_course_teacher CCT on T.id = CCT.teacher_id
+        where CCT.class_id = #{classId} and CCT.subject_id = #{subjectId}
+    </select>
+    <insert id="insertClass" useGeneratedKeys="true" keyProperty="id">
+        insert into class (class_name,grade,main_teacher) values(#{class.className},#{class.grade},#{mainTeacherId})
+    </insert>
+    <insert id="insertClassCourseTeacher">
+        insert into class_course_teacher (class_id,subject_id,teacher_id) values(#{classId},#{subjectId},#{teacherId})
+    </insert>
+    <update id="updateClass">
+        update class
+        <set>
+            <if test="class.className != ''">class_name = #{class.className},</if>
+            <if test="class.grade != ''">grade = #{class.gender},</if>
+            <if test="class.mainTeacher.id != ''">main_teacher = #{mainTeacherId}</if>
+        </set>
+        where id = #{class.id}
+    </update>
+    <delete id="deleteClassCourseTeacher">
+        delete from class_course_teacher where class_id = #{classId} and subject_id = #{subjectId}
+    </delete>
+    <delete id="deleteClass">
+        delete from class where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mappper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.studentmanager.mapper.GradeCourseMapper">
+    <resultMap id="gradeCourse" type="com.example.studentmanager.entity.GradeCourse">
+        <result property="grade" column="grade"/>
+        <result property="subjectIds" column="subjectId"/>
+        <result property="subjectNames" column="subjectName"/>
+    </resultMap>
+    <select id="findGradeCourse" resultMap="gradeCourse">
+        select
+        GC.grade,
+        group_concat(S.id) subjectId,
+        group_concat(S.name) subjectName
+        from grade_course GC
+        left join subject S on S.id = GC.subject where GC.grade = #{grade} group by GC.grade
+    </select>
+    <insert id="insertGradeSubjectRelation">
+        insert into grade_course (grade,subject_id) values(#{grade},#{subjectId})
+    </insert>
+    <delete id="deleteGradeSubjectRelation">
+        delete from grade_course where grade = #{grade}
+    </delete>
+</mapper>

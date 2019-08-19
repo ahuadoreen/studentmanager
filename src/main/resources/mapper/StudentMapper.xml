@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mappper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.studentmanager.mapper.StudentMapper">
+    <resultMap id="student" type="com.example.studentmanager.entity.Student">
+        <id property="id" column="id"/>
+        <result property="sno" column="sno"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
+        <association property="classes" resultMap="class" />
+    </resultMap>
+    <resultMap id="class" type="com.example.studentmanager.entity.Classes">
+        <id property="id" column="classId"/>
+        <result property="grade" column="grade"/>
+        <result property="className" column="class_name"/>
+    </resultMap>
+    <select id="findStudents" resultMap="student">
+        select
+        S.id,
+        S.sno,
+        S.name,
+        S.gender,
+        S.age,
+        C.id classId,
+        C.class_name
+        from student S
+        left join class C on S.class = C.id where S.name like CONCAT('%',#{name},'%')
+    </select>
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="student.id">
+        insert into student (sno,name,gender,age,class) values(#{student.sno},#{student.name},#{student.gender},#{student.age},#{classId})
+    </insert>
+    <update id="updateStudent">
+        update student
+        <set>
+            <if test="student.sno != ''">sno = #{student.sno},</if>
+            <if test="student.name != ''">name = #{student.name},</if>
+            <if test="student.gender != ''">gender = #{student.gender},</if>
+            <if test="student.age != ''">age = #{student.age},</if>
+            <if test="classId != ''">class = #{classId}</if>
+        </set>
+        where id = #{student.id}
+    </update>
+    <delete id="deleteStudent">
+        delete from student where id = #{id}
+    </delete>
+</mapper>
