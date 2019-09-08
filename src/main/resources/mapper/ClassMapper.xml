@@ -43,8 +43,8 @@
         update class
         <set>
             <if test="class.className != ''">class_name = #{class.className},</if>
-            <if test="class.grade != ''">grade = #{class.gender},</if>
-            <if test="class.mainTeacher.id != ''">main_teacher = #{mainTeacherId}</if>
+            <if test="class.grade != ''">grade = #{class.grade},</if>
+            <if test="mainTeacherId != ''">main_teacher = #{mainTeacherId}</if>
         </set>
         where id = #{class.id}
     </update>
