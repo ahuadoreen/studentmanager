@@ -33,7 +33,7 @@
         select T.id teacherId,T.name teacherName from teacher T left join class_course_teacher CCT on T.id = CCT.teacher_id
         where CCT.class_id = #{classId} and CCT.subject_id = #{subjectId}
     </select>
-    <insert id="insertClass" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertClass" useGeneratedKeys="true" keyProperty="class.id">
         insert into class (class_name,grade,main_teacher) values(#{class.className},#{class.grade},#{mainTeacherId})
     </insert>
     <insert id="insertClassCourseTeacher">
