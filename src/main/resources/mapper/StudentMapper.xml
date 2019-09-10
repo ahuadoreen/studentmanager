@@ -23,7 +23,8 @@
         S.gender,
         S.age,
         C.id classId,
-        C.class_name
+        C.class_name,
+        C.grade
         from student S
         left join class C on S.class = C.id where S.name like CONCAT('%',#{name},'%')
     </select>
