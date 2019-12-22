@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
     implementation 'com.auth0:java-jwt:3.8.1'
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.12'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

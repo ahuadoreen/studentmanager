@@ -1,17 +1,23 @@
 package com.example.studentmanager.interceptor;
 
 import com.example.studentmanager.utils.JWTUtil;
+import com.example.studentmanager.utils.RedisUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
+    @Resource
+    private RedisUtil redisUtil;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getMethod().equals("OPTIONS")){
@@ -25,12 +31,24 @@ public class TokenInterceptor implements HandlerInterceptor {
         if(null != token) {
             Map<String, String> login = JWTUtil.verifyToken(token);
             String username = request.getHeader("username");
+            System.out.println("redis 存储的字符串为: "+ redisUtil.get(username));
             //解密token后的loginId与用户传来的loginId不一致，一般都是token过期
             if(null != username && null != login) {
                 if(username.equals(login.get("username"))) {
                     return true;
                 }
                 else{
+                    String redisCache = (String) redisUtil.get(username);
+                    if(token.equals(redisCache)){
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("username", username);
+                        String newToken = JWTUtil.genToken(map, new Date(System.currentTimeMillis() + 60L* 1000L * 30L));
+                        redisUtil.set(username, newToken, 60 * 60 * 2);
+                        responseData = "{\"code\":100,\"message\":\"Token expired, a new token generated.\",\"token\":\"" + newToken + "\"}";
+                        System.out.println(responseData);
+                        responseMessage(response, response.getWriter(), responseData);
+                        return false;
+                    }
                     responseMessage(response, response.getWriter(), responseData);
                     return false;
                 }
