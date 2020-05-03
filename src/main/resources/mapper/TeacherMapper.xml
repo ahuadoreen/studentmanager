@@ -7,6 +7,7 @@
         <result property="name" column="name"/>
         <result property="gender" column="gender"/>
         <result property="age" column="age"/>
+        <result property="imageUrl" column="image_url"/>
         <result property="subjectIds" column="subjectId"/>
         <result property="subjectNames" column="subjectName"/>
     </resultMap>
@@ -20,10 +21,23 @@
         group_concat(S.name) subjectName
         from teacher T
         left join teacher_subject TS on T.id = TS.teacher_id
-        left join subject S on S.id = TS.subject_id where T.name like CONCAT('%',#{name},'%') group by T.id
+        left join subject S on S.id = TS.subject_id where T.name like CONCAT('%',#{name},'%') group by T.id order by T.id desc
+    </select>
+    <select id="findTeacherById" resultMap="teacher">
+        select
+        T.id,
+        T.name,
+        T.gender,
+        T.age,
+        T.image_url,
+        group_concat(S.id) subjectId,
+        group_concat(S.name) subjectName
+        from teacher T
+        left join teacher_subject TS on T.id = TS.teacher_id
+        left join subject S on S.id = TS.subject_id where T.id = #{id}
     </select>
     <insert id="insertTeacher" useGeneratedKeys="true" keyProperty="id">
-        insert into teacher (name,gender,age) values(#{teacher.name},#{teacher.gender},#{teacher.age})
+        insert into teacher (name,gender,age, image_url) values(#{teacher.name},#{teacher.gender},#{teacher.age},#{teacher.imageUrl})
     </insert>
     <insert id="insertTeacherSubjectRelation">
         insert into teacher_subject (teacher_id,subject_id) values(#{teacherId},#{subjectId})
@@ -33,7 +47,8 @@
         <set>
             <if test="teacher.name != ''">name = #{teacher.name},</if>
             <if test="teacher.gender != ''">gender = #{teacher.gender},</if>
-            <if test="teacher.age != ''">age = #{teacher.age}</if>
+            <if test="teacher.age != ''">age = #{teacher.age},</if>
+            <if test="teacher.imageUrl != null">image_url = #{teacher.imageUrl}</if>
         </set>
         where id = #{teacher.id}
     </update>

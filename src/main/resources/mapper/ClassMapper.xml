@@ -24,7 +24,7 @@
         T.id teacherId,
         T.name teacherName
         from class C
-        left join teacher T on C.main_teacher = T.id where T.name like CONCAT('%',#{name},'%')
+        left join teacher T on C.main_teacher = T.id where T.name like CONCAT('%',#{name},'%') order by C.id desc
     </select>
     <select id="findCoursesByGrade" resultMap="subject">
         select S.id,S.name from subject S left join grade_course GC on S.id = GC.subject where GC.grade = #{grade}

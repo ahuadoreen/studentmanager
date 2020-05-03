@@ -5,6 +5,7 @@ public class Teacher {
     private String name;
     private Integer gender;
     private Integer age;
+    private String imageUrl;
     private String subjectIds;
     private String subjectNames;
 
@@ -38,6 +39,14 @@ public class Teacher {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getSubjectIds() {

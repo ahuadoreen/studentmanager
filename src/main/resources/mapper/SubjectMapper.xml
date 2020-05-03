@@ -7,7 +7,7 @@
         <result property="name" column="name"/>
     </resultMap>
     <select id="findSubjects" resultType="com.example.studentmanager.entity.Subject" >
-        select id,name from subject where name like CONCAT('%',#{name},'%')
+        select id,name from subject where name like CONCAT('%',#{name},'%') order by id desc
     </select>
     <insert id="insertSubject">
         insert into subject (name) values(#{name})

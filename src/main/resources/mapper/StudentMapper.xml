@@ -26,7 +26,7 @@
         C.class_name,
         C.grade
         from student S
-        left join class C on S.class = C.id where S.name like CONCAT('%',#{name},'%')
+        left join class C on S.class = C.id where S.name like CONCAT('%',#{name},'%') order by S.id desc
     </select>
     <insert id="insertStudent" useGeneratedKeys="true" keyProperty="student.id">
         insert into student (sno,name,gender,age,class) values(#{student.sno},#{student.name},#{student.gender},#{student.age},#{classId})

@@ -12,4 +12,5 @@ public interface TeacherMapper {
     void deleteTeacherSubjectRelation(@Param("teacherId")Long teacherId);
     void updateTeacher(@Param("teacher") Teacher teacher);
     void deleteTeacher(@Param("id")Long id);
+    Teacher findTeacherById(@Param("id")Long id);
 }
