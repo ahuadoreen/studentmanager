@@ -12,3 +12,6 @@ a springboot mybatis system for student manager
 4. 在浏览器输入http://localhost:8080/studentmanage/teacher/teachers ，如果显示code为401的json返回，证明运行成功。
 
 本代码的分解教程，请至https://www.jianshu.com/nb/41542276 查看我的springboot教程系列。
+
+2020-5-3更新后
+更新了上传图片的代码后，需要注意的是src/main/resources目录下的application.properties中的web.upload-path=F:/work/images/即保存上传图片的目录需要修改成自己电脑中的目录。
