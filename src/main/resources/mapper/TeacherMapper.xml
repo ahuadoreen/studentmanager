@@ -7,7 +7,7 @@
         <result property="name" column="name"/>
         <result property="gender" column="gender"/>
         <result property="age" column="age"/>
-        <result property="imageUrl" column="image_url"/>
+        <result property="imageUrl" column="imageUrl"/>
         <result property="subjectIds" column="subjectId"/>
         <result property="subjectNames" column="subjectName"/>
     </resultMap>
@@ -17,6 +17,7 @@
         T.name,
         T.gender,
         T.age,
+        concat(#{path},T.image_url) imageUrl,
         group_concat(S.id) subjectId,
         group_concat(S.name) subjectName
         from teacher T
@@ -29,7 +30,7 @@
         T.name,
         T.gender,
         T.age,
-        T.image_url,
+        concat(#{path},T.image_url) imageUrl,
         group_concat(S.id) subjectId,
         group_concat(S.name) subjectName
         from teacher T

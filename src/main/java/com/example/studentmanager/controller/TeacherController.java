@@ -21,8 +21,6 @@ import java.util.Set;
 public class TeacherController {
     @Autowired
     TeacherMapper teacherMapper;
-    @Autowired
-    private ResourceLoader resourceLoader;
     @Value("${web.upload-path}")
     private String path;
     @Value("${web.image-path}")
@@ -31,7 +29,7 @@ public class TeacherController {
     @RequestMapping(value = "/teachers")
     public ResponseData findTeachers(final String name, final Integer index, final Integer size){
         Page<Teacher> page = PageHelper.startPage(index + 1, size);
-        List<Teacher> teachers = teacherMapper.findTeachers(name);
+        List<Teacher> teachers = teacherMapper.findTeachers(name, imagePath);
         ResponseData responseData = ResponseData.ok();
         responseData.putDataValue("pageCount", page.getPages());
         responseData.putDataValue("total", page.getTotal());
@@ -99,11 +97,7 @@ public class TeacherController {
 
     @RequestMapping(value = "/teacherDetail")
     public ResponseData findTeacherDetail(Long id){
-        Teacher teacher = teacherMapper.findTeacherById(id);
-        String imageUrl = teacher.getImageUrl();
-        if(imageUrl != null){
-            teacher.setImageUrl(imagePath + imageUrl);
-        }
+        Teacher teacher = teacherMapper.findTeacherById(id, imagePath);
         ResponseData responseData = ResponseData.ok();
         responseData.putDataValue("teacher", teacher);
         return responseData;
