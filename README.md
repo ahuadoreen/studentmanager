@@ -15,3 +15,5 @@ a springboot mybatis system for student manager
 
 2020-5-3更新后
 更新了上传图片的代码后，需要注意的是src/main/resources目录下的application.properties中的web.upload-path=F:/work/images/即保存上传图片的目录需要修改成自己电脑中的目录。
+以及数据库teacher表需要添加字段image_url，可使用语句
+ALTER TABLE teacher add image_url varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
