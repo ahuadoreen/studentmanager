@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.8.1'
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.12'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation "org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.2.1"
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
