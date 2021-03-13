@@ -4,11 +4,12 @@ import com.example.studentmanager.entity.*;
 import com.example.studentmanager.mapper.ClassMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class ClassController {
 	@Autowired
 	ClassMapper classMapper;
 
-	@RequestMapping(value = "/addClass", method = RequestMethod.POST)
+	@PostMapping(value = "/addClass", consumes = { "application/x-www-form-urlencoded" })
 	@ResponseBody
     public ResponseData addClass(
 			final String className, final Integer grade, final String mainTeacherId)
@@ -33,8 +34,11 @@ public class ClassController {
 		ResponseData responseData = ResponseData.ok();
 		return responseData;
     }
-	
-	@RequestMapping(value = "/classes", method = RequestMethod.GET)
+
+	@Parameters({
+			@Parameter(name = "name", description = "班主任姓名", schema = @Schema(implementation = String.class), in = ParameterIn.QUERY,
+					allowEmptyValue = true)})
+	@GetMapping(value = "/classes")
 	@ResponseBody
     public ResponseData getClasses(final String name, final Integer index, final Integer size)
     {
@@ -47,7 +51,7 @@ public class ClassController {
 		return responseData;
     }
 
-	@RequestMapping(value = "/editClass", method = RequestMethod.POST)
+	@PostMapping(value = "/editClass", consumes = { "application/x-www-form-urlencoded" })
 	@ResponseBody
 	public ResponseData editClass(Long id, final String className, final Integer grade, final String mainTeacherId)
 	{
@@ -60,7 +64,7 @@ public class ClassController {
 		return responseData;
 	}
 
-	@RequestMapping(value = "/deleteClass", method = RequestMethod.POST)
+	@PostMapping(value = "/deleteClass", consumes = { "application/x-www-form-urlencoded" })
 	@ResponseBody
 	public ResponseData deleteClass(Long id)
 	{
@@ -69,7 +73,7 @@ public class ClassController {
 		return responseData;
 	}
 
-	@RequestMapping(value = "/courseTeachers", method = RequestMethod.GET)
+	@GetMapping(value = "/courseTeachers")
 	@ResponseBody
 	public ResponseData getCourseTeacher(Long id, final Integer grade)
 	{
@@ -92,7 +96,7 @@ public class ClassController {
 		return responseData;
 	}
 
-	@RequestMapping(value = "/editCourseTeacher", method = RequestMethod.POST)
+	@PostMapping(value = "/editCourseTeacher", consumes = { "application/x-www-form-urlencoded" })
 	@ResponseBody
 	public ResponseData editCourseTeacher(Long id, final Long subjectId, final String teacherId)
 	{

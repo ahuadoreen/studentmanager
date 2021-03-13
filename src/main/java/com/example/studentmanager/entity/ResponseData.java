@@ -25,7 +25,7 @@ public class ResponseData {
         return this;
     }
 
-    private ResponseData(int code, String message) {
+    public ResponseData(int code, String message) {
         this.code = code;
         this.message = message;
     }

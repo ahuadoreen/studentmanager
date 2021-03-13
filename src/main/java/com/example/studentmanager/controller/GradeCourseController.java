@@ -4,10 +4,7 @@ import com.example.studentmanager.entity.GradeCourse;
 import com.example.studentmanager.entity.ResponseData;
 import com.example.studentmanager.mapper.GradeCourseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +17,7 @@ public class GradeCourseController {
     @Autowired
     private GradeCourseMapper gradeCourseMapper;
 
-    @RequestMapping(value = "/addGradeCourse", method = RequestMethod.POST)
+    @PostMapping(value = "/addGradeCourse", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData addGradeCourse(final Integer grade, final String[] subjectIds){
         for(int i=0;i<subjectIds.length;i++){
@@ -30,7 +27,7 @@ public class GradeCourseController {
         return responseData;
     }
 
-    @RequestMapping(value = "/gradeCourses", method = RequestMethod.GET)
+    @GetMapping(value = "/gradeCourses")
     @ResponseBody
     public ResponseData getGradeCourses()
     {
@@ -47,7 +44,7 @@ public class GradeCourseController {
         return responseData;
     }
 
-    @RequestMapping(value = "/editGradeCourse", method = RequestMethod.POST)
+    @PostMapping(value = "/editGradeCourse", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData editGradeCourse(final Integer grade, final String[] subjectIds)
     {
@@ -59,7 +56,7 @@ public class GradeCourseController {
         return responseData;
     }
 
-    @RequestMapping(value = "/deleteGradeCourse", method = RequestMethod.POST)
+    @PostMapping(value = "/deleteGradeCourse", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData deleteGradeCourse(final Integer grade)
     {

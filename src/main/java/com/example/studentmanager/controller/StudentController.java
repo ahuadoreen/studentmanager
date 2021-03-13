@@ -6,10 +6,7 @@ import com.example.studentmanager.mapper.StudentMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class StudentController {
     @Autowired
     StudentMapper studentMapper;
 
-    @RequestMapping(value = "/students")
+    @GetMapping(value = "/students")
     public ResponseData findStudents(final String name, final Integer index, final Integer size){
         Page<Student> page = PageHelper.startPage(index + 1, size);
         List<Student> students = studentMapper.findStudents(name);
@@ -30,7 +27,7 @@ public class StudentController {
         return responseData;
     }
 
-    @PostMapping(value = "/addStudent")
+    @PostMapping(value = "/addStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData addStudent(final String sno, final String name, final String age, Integer gender, Long classId)
     {
@@ -44,7 +41,7 @@ public class StudentController {
         return responseData;
     }
 
-    @PostMapping(value = "/editStudent")
+    @PostMapping(value = "/editStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData editStudent(Long id, final String sno, final String name, final String age, Integer gender, Long classId)
     {
@@ -59,7 +56,7 @@ public class StudentController {
         return responseData;
     }
 
-    @PostMapping(value = "/deleteStudent")
+    @PostMapping(value = "/deleteStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData deleteStudent(Long id)
     {

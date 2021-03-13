@@ -23,7 +23,7 @@ public class TeacherController {
     @Value("${web.image-path}")
     private String imagePath;
 
-    @RequestMapping(value = "/teachers")
+    @GetMapping(value = "/teachers")
     public ResponseData findTeachers(final String name, final Integer index, final Integer size){
         Page<Teacher> page = PageHelper.startPage(index + 1, size);
         List<Teacher> teachers = teacherMapper.findTeachers(name, imagePath);
@@ -34,7 +34,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @PostMapping(value = "/addTeacher")
+    @PostMapping(value = "/addTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData addTeacher(final String name, final String[] subjectIds, final String age, Integer gender,
                                    @RequestParam(value = "file", required = false) MultipartFile file)
@@ -57,7 +57,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @PostMapping(value = "/editTeacher")
+    @PostMapping(value = "/editTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData editTeacher(Long id, final String name, final String[] subjectIds, final String age, Integer gender,
                                     @RequestParam(value = "file", required = false) MultipartFile file)
@@ -82,7 +82,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @PostMapping(value = "/deleteTeacher")
+    @PostMapping(value = "/deleteTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData deleteTeacher(Long id)
     {
@@ -92,7 +92,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @RequestMapping(value = "/teacherDetail")
+    @GetMapping(value = "/teacherDetail")
     public ResponseData findTeacherDetail(Long id){
         Teacher teacher = teacherMapper.findTeacherById(id, imagePath);
         ResponseData responseData = ResponseData.ok();
