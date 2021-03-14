@@ -1,16 +1,23 @@
 package com.example.studentmanager.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class Student {
+    @Schema(example = "1")
     private Long id;
 
+    @Schema(example = "1")
     private String sno;
 
+    @Schema(example = "1")
     private String name;
 
     private Classes classes;
 
+    @Schema(example = "1")
     private Integer gender;
 
+    @Schema(example = "15")
     private Integer age;
 
     public Long getId() {

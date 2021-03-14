@@ -1,15 +1,18 @@
 package com.example.studentmanager.controller;
 
+import com.example.studentmanager.entity.ListWithPageData;
+import com.example.studentmanager.entity.ResponseDataNew;
 import com.example.studentmanager.entity.ResponseData;
 import com.example.studentmanager.entity.Score;
 import com.example.studentmanager.mapper.ScoreMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,18 +22,24 @@ public class ScoreController {
     @Autowired
     ScoreMapper scoreMapper;
 
-    @RequestMapping(value = "/scores")
-    public ResponseData findScores(final String name, final Integer index, final Integer size){
+    @Parameters({
+            @Parameter(name = "name", description = "学生姓名", schema = @Schema(implementation = String.class), in = ParameterIn.QUERY,
+                    allowEmptyValue = true)})
+    @GetMapping(value = "/scores")
+    public ResponseDataNew<ListWithPageData<Score>> findScores(final String name, final Integer index, final Integer size){
         Page<Score> page = PageHelper.startPage(index + 1, size);
         List<Score> scores = scoreMapper.selectByStudent(name);
-        ResponseData responseData = ResponseData.ok();
-        responseData.putDataValue("pageCount", page.getPages());
-        responseData.putDataValue("total", page.getTotal());
-        responseData.putDataValue("scores", scores);
-        return responseData;
+        ResponseDataNew<ListWithPageData<Score>> response = new ResponseDataNew<>();
+        response.ok();
+        ListWithPageData<Score> data = new ListWithPageData<>();
+        data.setPageCount(page.getPages());
+        data.setTotal(page.getTotal());
+        data.setList(scores);
+        response.setData(data);
+        return response;
     }
 
-    @PostMapping(value = "/addScore")
+    @PostMapping(value = "/addScore", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData addScore(final Integer score, Long studentId, Long subjectId, Long teacherId)
     {
@@ -44,7 +53,7 @@ public class ScoreController {
         return responseData;
     }
 
-    @PostMapping(value = "/editScore")
+    @PostMapping(value = "/editScore", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData editScore(Long id, Integer score, Long studentId, Long subjectId, Long teacherId)
     {
@@ -59,7 +68,7 @@ public class ScoreController {
         return responseData;
     }
 
-    @PostMapping(value = "/deleteScore")
+    @PostMapping(value = "/deleteScore", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
     public ResponseData deleteScore(Long id)
     {

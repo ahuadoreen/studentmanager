@@ -1,12 +1,21 @@
 package com.example.studentmanager.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class Teacher {
+    @Schema(example = "1")
     private Long id;
+    @Schema(example = "李磊")
     private String name;
+    @Schema(example = "1")
     private Integer gender;
+    @Schema(example = "25")
     private Integer age;
+    @Schema(example = "${serverPath}/images/75874714c6f547519d9f49682efba0e6.jpg")
     private String imageUrl;
+    @Schema(example = "1,2,3")
     private String subjectIds;
+    @Schema(example = "语文,数学,英语")
     private String subjectNames;
 
     public Long getId() {

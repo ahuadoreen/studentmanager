@@ -6,7 +6,7 @@ import java.util.Map;
 public class ResponseData {
     private final String message;
     private final int code;
-    private final Map<String, Object> data = new HashMap<String, Object>();
+    private final Map<String, Object> data = new HashMap<>();
 
     public String getMessage() {
         return message;
@@ -20,9 +20,8 @@ public class ResponseData {
         return data;
     }
 
-    public ResponseData putDataValue(String key, Object value) {
+    public void putDataValue(String key, Object value) {
         data.put(key, value);
-        return this;
     }
 
     public ResponseData(int code, String message) {

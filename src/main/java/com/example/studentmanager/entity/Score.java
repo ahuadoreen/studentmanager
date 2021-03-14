@@ -1,7 +1,11 @@
 package com.example.studentmanager.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class Score {
+    @Schema(example = "1")
     private Long id;
+    @Schema(example = "90")
     private Integer score;
     private Long studentId;
     private Long subjectId;
