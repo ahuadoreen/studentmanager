@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,31 +43,30 @@ public class ScoreController {
 
     @PostMapping(value = "/addScore", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData addScore(final Integer score, Long studentId, Long subjectId, Long teacherId)
+    public ResponseData addScore(@Validated Score scoreO, BindingResult bindingResult)
     {
-        Score scoreO = new Score();
-        scoreO.setScore(score);
-        scoreO.setStudentId(studentId);
-        scoreO.setSubjectId(subjectId);
-        scoreO.setTeacherId(teacherId);
-        scoreMapper.insert(scoreO);
-        ResponseData responseData = ResponseData.ok();
-        return responseData;
+        if (bindingResult.hasErrors()) {
+            ResponseData responseData = new ResponseData(400, bindingResult.getFieldError().getDefaultMessage());
+            return responseData;
+        } else {
+            scoreMapper.insert(scoreO);
+            ResponseData responseData = ResponseData.ok();
+            return responseData;
+        }
     }
 
     @PostMapping(value = "/editScore", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData editScore(Long id, Integer score, Long studentId, Long subjectId, Long teacherId)
+    public ResponseData editScore(@Validated Score scoreO, BindingResult bindingResult)
     {
-        Score scoreO = new Score();
-        scoreO.setId(id);
-        scoreO.setScore(score);
-        scoreO.setStudentId(studentId);
-        scoreO.setSubjectId(subjectId);
-        scoreO.setTeacherId(teacherId);
-        scoreMapper.updateByPrimaryKey(scoreO);
-        ResponseData responseData = ResponseData.ok();
-        return responseData;
+        if (bindingResult.hasErrors()) {
+            ResponseData responseData = new ResponseData(400, bindingResult.getFieldError().getDefaultMessage());
+            return responseData;
+        } else {
+            scoreMapper.updateByPrimaryKey(scoreO);
+            ResponseData responseData = ResponseData.ok();
+            return responseData;
+        }
     }
 
     @PostMapping(value = "/deleteScore", consumes = { "application/x-www-form-urlencoded" })

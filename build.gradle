@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.2.1"
     implementation "org.springdoc:springdoc-openapi-ui:1.5.4"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
