@@ -29,7 +29,7 @@
         left join class C on S.class = C.id where S.name like CONCAT('%',#{name},'%') order by S.id desc
     </select>
     <insert id="insertStudent" useGeneratedKeys="true" keyProperty="student.id">
-        insert into student (sno,name,gender,age,class) values(#{student.sno},#{student.name},#{student.gender},#{student.age},#{classId})
+        insert into student (sno,name,gender,age,class) values(#{student.sno},#{student.name},#{student.gender},#{student.age},#{student.classId})
     </insert>
     <update id="updateStudent">
         update student
@@ -38,7 +38,7 @@
             <if test="student.name != ''">name = #{student.name},</if>
             <if test="student.gender != ''">gender = #{student.gender},</if>
             <if test="student.age != ''">age = #{student.age},</if>
-            <if test="classId != ''">class = #{classId}</if>
+            <if test="student.classId != ''">class = #{student.classId}</if>
         </set>
         where id = #{student.id}
     </update>

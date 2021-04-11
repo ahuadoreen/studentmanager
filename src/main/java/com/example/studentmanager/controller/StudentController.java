@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,29 +37,18 @@ public class StudentController {
 
     @PostMapping(value = "/addStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData addStudent(final String sno, final String name, final String age, Integer gender, Long classId)
+    public ResponseData addStudent(@Validated Student student)
     {
-        Student student = new Student();
-        student.setSno(sno);
-        student.setName(name);
-        student.setAge(Integer.valueOf(age));
-        student.setGender(gender);
-        studentMapper.insertStudent(student, classId);
+        studentMapper.insertStudent(student);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
 
     @PostMapping(value = "/editStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData editStudent(Long id, final String sno, final String name, final String age, Integer gender, Long classId)
+    public ResponseData editStudent(@Validated Student student)
     {
-        Student student = new Student();
-        student.setId(id);
-        student.setSno(sno);
-        student.setName(name);
-        student.setAge(Integer.valueOf(age));
-        student.setGender(gender);
-        studentMapper.updateStudent(student, classId);
+        studentMapper.updateStudent(student);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }

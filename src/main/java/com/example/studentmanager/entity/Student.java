@@ -2,6 +2,10 @@ package com.example.studentmanager.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class Student {
     @Schema(example = "1")
     private Long id;
@@ -9,7 +13,7 @@ public class Student {
     @Schema(example = "1")
     private String sno;
 
-    @Schema(example = "1")
+    @Schema(example = "李磊")
     private String name;
 
     private Classes classes;
@@ -18,7 +22,12 @@ public class Student {
     private Integer gender;
 
     @Schema(example = "15")
+    @NotNull(message="年龄不能为空")
+    @Min(value = 7, message = "学生年龄不能小于7岁")
+    @Max(value = 18, message = "学生年龄不能大于18岁")
     private Integer age;
+
+    private Long classId;
 
     public Long getId() {
         return id;
@@ -58,6 +67,14 @@ public class Student {
 
     public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 
     public Classes getClasses() {
