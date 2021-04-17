@@ -1,7 +1,9 @@
 package com.example.studentmanager.controller;
 
+import com.example.studentmanager.entity.Insert;
 import com.example.studentmanager.entity.ResponseData;
 import com.example.studentmanager.entity.Student;
+import com.example.studentmanager.entity.Update;
 import com.example.studentmanager.mapper.StudentMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -37,7 +39,7 @@ public class StudentController {
 
     @PostMapping(value = "/addStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData addStudent(@Validated Student student)
+    public ResponseData addStudent(@Validated(value = Insert.class) Student student)
     {
         studentMapper.insertStudent(student);
         ResponseData responseData = ResponseData.ok();
@@ -46,7 +48,7 @@ public class StudentController {
 
     @PostMapping(value = "/editStudent", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData editStudent(@Validated Student student)
+    public ResponseData editStudent(@Validated(value = Update.class) Student student)
     {
         studentMapper.updateStudent(student);
         ResponseData responseData = ResponseData.ok();
