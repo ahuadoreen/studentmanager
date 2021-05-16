@@ -1,7 +1,7 @@
 package com.example.studentmanager.interceptor;
 
-
 import com.example.studentmanager.entity.ResponseData;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -65,5 +65,16 @@ public class GlobalExceptionHandler {
 
         ResponseData responseData = new ResponseData(400, msg);
         return responseData;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseData handleException(Exception ex){
+        if (ex instanceof DataIntegrityViolationException) { // 数据库操作异常
+            if(ex.toString().contains("a foreign key constraint fails")){ //外键关联问题，具体前端可以根据发送的请求判断
+                return new ResponseData(5001, "a foreign key constraint fails");
+            }
+        }
+        return new ResponseData(500, "Internal Server Error");
     }
 }

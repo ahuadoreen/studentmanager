@@ -6,6 +6,10 @@ import com.example.studentmanager.mapper.TeacherMapper;
 import com.example.studentmanager.utils.FileUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +88,7 @@ public class TeacherController {
 
     @PostMapping(value = "/deleteTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
+    // todo 此处Swagger映射有bug，暂时只能用postman测试，待解决
     public ResponseData deleteTeacher(Long id)
     {
         teacherMapper.deleteTeacherSubjectRelation(id);
