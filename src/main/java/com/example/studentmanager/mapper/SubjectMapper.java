@@ -10,4 +10,7 @@ public interface SubjectMapper {
     void insertSubject(@Param("name")String name);
     void updateSubject(@Param("id")Long id, @Param("name")String name);
     void deleteSubject(@Param("id")Long id);
+    void insertSubjects(@Param("subjectList")List<Subject> subjectList);
+    void updateSubjects(@Param("subjectList")List<Subject> subjectList);
+    void deleteSubjects(@Param("ids")Long[] ids);
 }

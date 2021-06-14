@@ -22,4 +22,40 @@
     <delete id="deleteSubject">
         delete from subject where id = #{id}
     </delete>
+    <insert id="insertSubjects">
+        insert into subject (name) values
+        <foreach collection="subjectList" item="subject" separator=",">
+            (#{subject.name})
+        </foreach>
+    </insert>
+    <update id="updateSubjects" parameterType="java.util.List">
+<!-- 直接拼接多条sql的方式，需要配置jdbc属性allowMultiQueries为true -->
+<!--        <foreach collection="subjectList" item="subject" separator=";">-->
+<!--            update subject-->
+<!--            <set>-->
+<!--                <if test="subject.name != ''">name = #{subject.name}</if>-->
+<!--            </set>-->
+<!--            where id = #{subject.id}-->
+<!--        </foreach>-->
+        <!-- case when方式，拼接成单条sql，写法略微复杂 -->
+        update subject
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="name=case" suffix="end,">
+                <foreach collection="subjectList" item="item" index="index">
+                    WHEN id=#{item.id} THEN #{item.name}
+                </foreach>
+            </trim>
+        </trim>
+        WHERE id IN
+        <foreach collection="subjectList" separator="," item="item" index="index" open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    <delete id="deleteSubjects" parameterType="java.lang.Long">
+        delete from subject
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

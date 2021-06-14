@@ -95,4 +95,27 @@ public class SubjectController {
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
+
+    @PostMapping(value = "/addSubjects")
+    public ResponseData addSubjects(@RequestBody List<Subject> subjects){
+        subjectMapper.insertSubjects(subjects);
+        ResponseData responseData = ResponseData.ok();
+        return responseData;
+    }
+
+    @PostMapping(value = "/editSubjects")
+    public ResponseData editSubjects(@RequestBody List<Subject> subjects){
+        subjectMapper.updateSubjects(subjects);
+        ResponseData responseData = ResponseData.ok();
+        return responseData;
+    }
+
+    @PostMapping(value = "/deleteSubjects")
+    @ResponseBody
+    public ResponseData deleteSubjects(@RequestBody Long[] ids)
+    {
+        subjectMapper.deleteSubjects(ids);
+        ResponseData responseData = ResponseData.ok();
+        return responseData;
+    }
 }
