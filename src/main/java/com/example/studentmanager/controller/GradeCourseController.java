@@ -4,6 +4,8 @@ import com.example.studentmanager.entity.GradeCourse;
 import com.example.studentmanager.entity.ResponseData;
 import com.example.studentmanager.mapper.GradeCourseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,10 +21,11 @@ public class GradeCourseController {
 
     @PostMapping(value = "/addGradeCourse", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData addGradeCourse(final Integer grade, final String[] subjectIds){
-        for(int i=0;i<subjectIds.length;i++){
-            gradeCourseMapper.insertGradeSubjectRelation(grade, Long.parseLong(subjectIds[i]));
-        }
+    public ResponseData addGradeCourse(final Integer grade, final Long[] subjectIds){
+//        for(int i=0;i<subjectIds.length;i++){
+//            gradeCourseMapper.insertGradeSubjectRelation(grade, subjectIds[i]);
+//        }
+        gradeCourseMapper.insertGradeSubjectRelations(grade, subjectIds);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
@@ -46,12 +49,14 @@ public class GradeCourseController {
 
     @PostMapping(value = "/editGradeCourse", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData editGradeCourse(final Integer grade, final String[] subjectIds)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseData editGradeCourse(final Integer grade, final Long[] subjectIds)
     {
         gradeCourseMapper.deleteGradeSubjectRelation(grade);
-        for(int i=0;i<subjectIds.length;i++){
-            gradeCourseMapper.insertGradeSubjectRelation(grade, Long.parseLong(subjectIds[i]));
-        }
+//        for(int i=0;i<subjectIds.length;i++){
+//            gradeCourseMapper.insertGradeSubjectRelation(grade, subjectIds[i]);
+//        }
+        gradeCourseMapper.insertGradeSubjectRelations(grade, subjectIds);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }

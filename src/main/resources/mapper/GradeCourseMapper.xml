@@ -18,6 +18,12 @@
     <insert id="insertGradeSubjectRelation">
         insert into grade_course (grade,subject) values(#{grade},#{subjectId})
     </insert>
+    <insert id="insertGradeSubjectRelations" parameterType="java.lang.Long">
+        insert into grade_course (grade,subject) values
+        <foreach collection="subjectIds" item="subjectId" separator=",">
+            (#{grade}, #{subjectId})
+        </foreach>
+    </insert>
     <delete id="deleteGradeSubjectRelation">
         delete from grade_course where grade = #{grade}
     </delete>

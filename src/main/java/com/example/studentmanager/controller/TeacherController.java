@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +42,8 @@ public class TeacherController {
 
     @PostMapping(value = "/addTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData addTeacher(final String name, final String[] subjectIds, final String age, Integer gender,
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseData addTeacher(final String name, final Long[] subjectIds, final String age, Integer gender,
                                    @RequestParam(value = "file", required = false) MultipartFile file)
     {
         Teacher teacher = new Teacher();
@@ -54,16 +57,18 @@ public class TeacherController {
         teacher.setAge(Integer.valueOf(age));
         teacher.setGender(gender);
         teacherMapper.insertTeacher(teacher);
-        for(int i=0;i<subjectIds.length;i++){
-            teacherMapper.insertTeacherSubjectRelation(teacher.getId(), Long.parseLong(subjectIds[i]));
-        }
+//        for(int i=0;i<subjectIds.length;i++){
+//            teacherMapper.insertTeacherSubjectRelation(teacher.getId(), subjectIds[i]);
+//        }
+        teacherMapper.insertTeacherSubjectRelations(teacher.getId(), subjectIds);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
 
     @PostMapping(value = "/editTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
-    public ResponseData editTeacher(Long id, final String name, final String[] subjectIds, final String age, Integer gender,
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseData editTeacher(Long id, final String name, final Long[] subjectIds, final String age, Integer gender,
                                     @RequestParam(value = "file", required = false) MultipartFile file)
     {
         teacherMapper.deleteTeacherSubjectRelation(id);
@@ -79,15 +84,17 @@ public class TeacherController {
             }
         }
         teacherMapper.updateTeacher(teacher);
-        for(int i=0;i<subjectIds.length;i++){
-            teacherMapper.insertTeacherSubjectRelation(id, Long.parseLong(subjectIds[i]));
-        }
+//        for(int i=0;i<subjectIds.length;i++){
+//            teacherMapper.insertTeacherSubjectRelation(id, subjectIds[i]);
+//        }
+        teacherMapper.insertTeacherSubjectRelations(teacher.getId(), subjectIds);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
 
     @PostMapping(value = "/deleteTeacher", consumes = { "application/x-www-form-urlencoded" })
     @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRED)
     // todo 此处Swagger映射有bug，暂时只能用postman测试，待解决
     public ResponseData deleteTeacher(Long id)
     {

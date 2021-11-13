@@ -43,6 +43,12 @@
     <insert id="insertTeacherSubjectRelation">
         insert into teacher_subject (teacher_id,subject_id) values(#{teacherId},#{subjectId})
     </insert>
+    <insert id="insertTeacherSubjectRelations" parameterType="java.lang.Long">
+        insert into teacher_subject (teacher_id,subject_id) values
+        <foreach collection="subjectIds" item="subjectId" separator=",">
+            (#{teacherId}, #{subjectId})
+        </foreach>
+    </insert>
     <update id="updateTeacher">
         update teacher
         <set>

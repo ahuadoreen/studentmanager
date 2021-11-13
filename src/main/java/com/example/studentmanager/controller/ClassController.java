@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -98,6 +100,7 @@ public class ClassController {
 
 	@PostMapping(value = "/editCourseTeacher", consumes = { "application/x-www-form-urlencoded" })
 	@ResponseBody
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseData editCourseTeacher(Long id, final Long subjectId, final String teacherId)
 	{
 		classMapper.deleteClassCourseTeacher(id, subjectId);
