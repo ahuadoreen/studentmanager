@@ -8,15 +8,20 @@ import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.delete.DeleteDSLCompleter;
 import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.insert.render.InsertStatementProvider;
+import org.mybatis.dynamic.sql.insert.render.MultiRowInsertStatementProvider;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
 import org.mybatis.dynamic.sql.select.SelectModel;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.update.UpdateDSL;
 import org.mybatis.dynamic.sql.update.UpdateDSLCompleter;
+import org.mybatis.dynamic.sql.update.UpdateModel;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.*;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +37,9 @@ public interface ScoreMapper {
 
     @UpdateProvider(type=SqlProviderAdapter.class, method="update")
     int update(UpdateStatementProvider updateStatement);
+
+    @InsertProvider(type=SqlProviderAdapter.class, method="insertMultiple")
+    int insertMultiple(MultiRowInsertStatementProvider<Score> insertStatement);
 
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
     @Results(id="ScoreResult", value= {
@@ -107,6 +115,22 @@ public interface ScoreMapper {
     default int deleteByPrimaryKey(Long id_) {
         return delete(c ->
                 c.where(scoreTable.id, isEqualTo(id_))
+        );
+    }
+
+    default int insertMultiple(Collection<Score> scores) {
+        return MyBatis3Utils.insertMultiple(this::insertMultiple, scores, scoreTable, c ->
+                c.map(scoreTable.id).toProperty("id")
+                        .map(score).toProperty("score")
+                        .map(studentId).toProperty("studentId")
+                        .map(subjectId).toProperty("subjectId")
+                        .map(teacherId).toProperty("teacherId")
+        );
+    }
+
+    default int deleteMultiple(Long[] ids) {
+        return delete(c ->
+                c.where(scoreTable.id, isIn(ids))
         );
     }
 }

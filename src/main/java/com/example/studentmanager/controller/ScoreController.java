@@ -16,10 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/score")
+@Validated
 public class ScoreController {
     @Autowired
     ScoreMapper scoreMapper;
@@ -76,5 +78,33 @@ public class ScoreController {
         scoreMapper.deleteByPrimaryKey(id);
         ResponseData responseData = ResponseData.ok();
         return responseData;
+    }
+
+    @PostMapping(value = "/addScores")
+    @ResponseBody
+    public ResponseData addScores(@RequestBody @Valid List<Score> scores, BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors()) {
+            ResponseData responseData = new ResponseData(400, bindingResult.getFieldError().getDefaultMessage());
+            return responseData;
+        } else {
+            scoreMapper.insertMultiple(scores);
+            ResponseData responseData = ResponseData.ok();
+            return responseData;
+        }
+    }
+
+    @PostMapping(value = "/deleteScores")
+    @ResponseBody
+    public ResponseData deleteScores(@RequestBody Long[] ids, BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors()) {
+            ResponseData responseData = new ResponseData(400, bindingResult.getFieldError().getDefaultMessage());
+            return responseData;
+        } else {
+            scoreMapper.deleteMultiple(ids);
+            ResponseData responseData = ResponseData.ok();
+            return responseData;
+        }
     }
 }
