@@ -18,6 +18,18 @@ public class ResponseDataNew<T> {
         setMessage("OK");
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public T getData() {
+        return data;
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }

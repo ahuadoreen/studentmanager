@@ -40,7 +40,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @PostMapping(value = "/addTeacher", consumes = { "application/x-www-form-urlencoded" })
+    @PostMapping(value = "/addTeacher", consumes = { "multipart/form-data" })
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseData addTeacher(final String name, final Long[] subjectIds, final String age, Integer gender,
@@ -65,7 +65,7 @@ public class TeacherController {
         return responseData;
     }
 
-    @PostMapping(value = "/editTeacher", consumes = { "application/x-www-form-urlencoded" })
+    @PostMapping(value = "/editTeacher", consumes = { "multipart/form-data" })
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseData editTeacher(Long id, final String name, final Long[] subjectIds, final String age, Integer gender,
