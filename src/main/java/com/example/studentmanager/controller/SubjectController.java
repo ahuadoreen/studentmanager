@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -70,16 +71,14 @@ public class SubjectController {
         responseData.putDataValue("subjects", subjectList);
         return responseData;
     }
-
     @PostMapping(value = "/addSubject", consumes = { "application/x-www-form-urlencoded" })
-    public ResponseData addSubject(final String name){
+    public ResponseData addSubject(String name){
         subjectMapper.insertSubject(name);
         ResponseData responseData = ResponseData.ok();
         return responseData;
     }
 
     @PostMapping(value = "/editSubject", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData editSubject(Long id, final String name)
     {
         subjectMapper.updateSubject(id, name);
@@ -88,7 +87,6 @@ public class SubjectController {
     }
 
     @PostMapping(value = "/deleteSubject", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData deleteSubject(Long id)
     {
         subjectMapper.deleteSubject(id);
@@ -111,7 +109,6 @@ public class SubjectController {
     }
 
     @PostMapping(value = "/deleteSubjects")
-    @ResponseBody
     public ResponseData deleteSubjects(@RequestBody Long[] ids)
     {
         subjectMapper.deleteSubjects(ids);

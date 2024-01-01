@@ -25,7 +25,6 @@ public class ClassController {
 	ClassMapper classMapper;
 
 	@PostMapping(value = "/addClass", consumes = { "application/x-www-form-urlencoded" })
-	@ResponseBody
     public ResponseData addClass(
 			final String className, final Integer grade, final String mainTeacherId)
     {
@@ -41,7 +40,6 @@ public class ClassController {
 			@Parameter(name = "name", description = "班主任姓名", schema = @Schema(implementation = String.class), in = ParameterIn.QUERY,
 					allowEmptyValue = true)})
 	@GetMapping(value = "/classes")
-	@ResponseBody
     public ResponseData getClasses(final String name, final Integer index, final Integer size)
     {
 		Page<Subject> page = PageHelper.startPage(index + 1, size);
@@ -54,7 +52,6 @@ public class ClassController {
     }
 
 	@PostMapping(value = "/editClass", consumes = { "application/x-www-form-urlencoded" })
-	@ResponseBody
 	public ResponseData editClass(Long id, final String className, final Integer grade, final String mainTeacherId)
 	{
 		Classes c = new Classes();
@@ -67,7 +64,6 @@ public class ClassController {
 	}
 
 	@PostMapping(value = "/deleteClass", consumes = { "application/x-www-form-urlencoded" })
-	@ResponseBody
 	public ResponseData deleteClass(Long id)
 	{
 		classMapper.deleteClass(id);
@@ -76,7 +72,6 @@ public class ClassController {
 	}
 
 	@GetMapping(value = "/courseTeachers")
-	@ResponseBody
 	public ResponseData getCourseTeacher(Long id, final Integer grade)
 	{
 		List<Subject> gradeCoursesList = classMapper.findCoursesByGrade(grade);
@@ -99,7 +94,6 @@ public class ClassController {
 	}
 
 	@PostMapping(value = "/editCourseTeacher", consumes = { "application/x-www-form-urlencoded" })
-	@ResponseBody
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseData editCourseTeacher(Long id, final Long subjectId, final String teacherId)
 	{

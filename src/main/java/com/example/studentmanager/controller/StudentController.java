@@ -38,7 +38,6 @@ public class StudentController {
     }
 
     @PostMapping(value = "/addStudent", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData addStudent(@Validated(value = Insert.class) Student student)
     {
         studentMapper.insertStudent(student);
@@ -47,7 +46,6 @@ public class StudentController {
     }
 
     @PostMapping(value = "/editStudent", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData editStudent(@Validated(value = Update.class) Student student)
     {
         studentMapper.updateStudent(student);
@@ -56,7 +54,6 @@ public class StudentController {
     }
 
     @PostMapping(value = "/deleteStudent", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData deleteStudent(Long id)
     {
         studentMapper.deleteStudent(id);

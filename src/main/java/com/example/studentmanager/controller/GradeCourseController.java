@@ -20,7 +20,6 @@ public class GradeCourseController {
     private GradeCourseMapper gradeCourseMapper;
 
     @PostMapping(value = "/addGradeCourse", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData addGradeCourse(final Integer grade, final Long[] subjectIds){
 //        for(int i=0;i<subjectIds.length;i++){
 //            gradeCourseMapper.insertGradeSubjectRelation(grade, subjectIds[i]);
@@ -31,7 +30,6 @@ public class GradeCourseController {
     }
 
     @GetMapping(value = "/gradeCourses")
-    @ResponseBody
     public ResponseData getGradeCourses()
     {
         List<Map> mapList = new ArrayList<>();
@@ -48,7 +46,6 @@ public class GradeCourseController {
     }
 
     @PostMapping(value = "/editGradeCourse", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseData editGradeCourse(final Integer grade, final Long[] subjectIds)
     {
@@ -62,7 +59,6 @@ public class GradeCourseController {
     }
 
     @PostMapping(value = "/deleteGradeCourse", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData deleteGradeCourse(final Integer grade)
     {
         gradeCourseMapper.deleteGradeSubjectRelation(grade);

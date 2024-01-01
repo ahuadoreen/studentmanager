@@ -44,7 +44,6 @@ public class ScoreController {
     }
 
     @PostMapping(value = "/addScore", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData addScore(@Validated Score scoreO, BindingResult bindingResult)
     {
         if (bindingResult.hasErrors()) {
@@ -58,7 +57,6 @@ public class ScoreController {
     }
 
     @PostMapping(value = "/editScore", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData editScore(@Validated Score scoreO, BindingResult bindingResult)
     {
         if (bindingResult.hasErrors()) {
@@ -72,7 +70,6 @@ public class ScoreController {
     }
 
     @PostMapping(value = "/deleteScore", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData deleteScore(Long id)
     {
         scoreMapper.deleteByPrimaryKey(id);
@@ -81,7 +78,6 @@ public class ScoreController {
     }
 
     @PostMapping(value = "/addScores")
-    @ResponseBody
     public ResponseData addScores(@RequestBody @Valid List<Score> scores, BindingResult bindingResult)
     {
         if (bindingResult.hasErrors()) {
@@ -95,7 +91,6 @@ public class ScoreController {
     }
 
     @PostMapping(value = "/deleteScores")
-    @ResponseBody
     public ResponseData deleteScores(@RequestBody Long[] ids, BindingResult bindingResult)
     {
         if (bindingResult.hasErrors()) {

@@ -41,7 +41,6 @@ public class TeacherController {
     }
 
     @PostMapping(value = "/addTeacher", consumes = { "multipart/form-data" })
-    @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseData addTeacher(final String name, final Long[] subjectIds, final String age, Integer gender,
                                    @RequestParam(value = "file", required = false) MultipartFile file)
@@ -66,7 +65,6 @@ public class TeacherController {
     }
 
     @PostMapping(value = "/editTeacher", consumes = { "multipart/form-data" })
-    @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseData editTeacher(Long id, final String name, final Long[] subjectIds, final String age, Integer gender,
                                     @RequestParam(value = "file", required = false) MultipartFile file)
@@ -93,7 +91,6 @@ public class TeacherController {
     }
 
     @PostMapping(value = "/deleteTeacher", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED)
     // todo 此处Swagger映射有bug，暂时只能用postman测试，待解决
     public ResponseData deleteTeacher(Long id)

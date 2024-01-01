@@ -38,7 +38,6 @@ public class UserController {
                                     "  }\n" +
                                     "}")})})})
     @PostMapping(value = "/login", consumes = { "application/x-www-form-urlencoded" })
-    @ResponseBody
     public ResponseData login(final String username, final String password)
     {
         ResponseData responseData = ResponseData.ok();

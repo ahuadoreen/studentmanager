@@ -22,15 +22,20 @@ jar {
     }
 }
 
+configurations {
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
     implementation 'com.auth0:java-jwt:3.8.1'
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.12'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation "org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.2.1"
-    implementation "org.springdoc:springdoc-openapi-ui:1.5.4"
+    implementation 'org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.2.1'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     runtimeOnly 'mysql:mysql-connector-java:8.0.13'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
