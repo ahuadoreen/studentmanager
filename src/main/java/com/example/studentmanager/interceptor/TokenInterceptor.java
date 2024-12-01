@@ -2,6 +2,7 @@ package com.example.studentmanager.interceptor;
 
 import com.example.studentmanager.utils.JWTUtil;
 import com.example.studentmanager.utils.RedisUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,11 @@ import java.util.Map;
 public class TokenInterceptor implements HandlerInterceptor {
     @Resource
     private RedisUtil redisUtil;
+    @Value("${token-expire}")
+    private int tokenExpire;
+    @Value("${token-refresh-expire}")
+    private int tokenRefreshExpire;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getMethod().equals("OPTIONS")){
@@ -42,8 +48,8 @@ public class TokenInterceptor implements HandlerInterceptor {
                     if(token.equals(redisCache)){
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("username", username);
-                        String newToken = JWTUtil.genToken(map, new Date(System.currentTimeMillis() + 60L* 1000L * 30L));
-                        redisUtil.set(username, newToken, 60 * 60 * 2);
+                        String newToken = JWTUtil.genToken(map, new Date(System.currentTimeMillis() + 60L* 1000L * tokenExpire));
+                        redisUtil.set(username, newToken, 60L * 60 * tokenRefreshExpire);
                         responseData = "{\"code\":100,\"message\":\"Token expired, a new token generated.\",\"token\":\"" + newToken + "\"}";
                         System.out.println(responseData);
                         responseMessage(response, response.getWriter(), responseData);

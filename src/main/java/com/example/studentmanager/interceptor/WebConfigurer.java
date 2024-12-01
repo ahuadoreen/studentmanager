@@ -5,8 +5,9 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.HeaderParameter;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,11 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
     @Value("${web.upload-path}")
@@ -23,6 +29,10 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Autowired
     private TokenInterceptor loginInterceptor;
+
+    private static final String SECURITY_HEADER_TOKEN = "token";
+
+    private static final String SECURITY_HEADER_USERNAME = "username";
 
     // 这个方法是用来配置静态资源的，比如html，js，css，等等
     @Override
@@ -42,9 +52,24 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Bean
     public OpenAPI openAPI(@Value("${springdoc.version}") String appVersion) {
         Components components = new Components();
-        components
-                .addParameters("token", new HeaderParameter().required(true).name("token").schema(new StringSchema()).required(true))
-                .addParameters("username", new HeaderParameter().required(true).name("username").schema(new StringSchema()).required(true));
+//        components
+//                .addParameters("token", new HeaderParameter().required(true).name("token").schema(new StringSchema()).required(true))
+//                .addParameters("username", new HeaderParameter().required(true).name("username").schema(new StringSchema()).required(true));
+        SecurityScheme token = new SecurityScheme()
+                .name(SECURITY_HEADER_TOKEN)
+                .type(SecurityScheme.Type.APIKEY)
+                .in(SecurityScheme.In.HEADER);
+        SecurityScheme username = new SecurityScheme()
+                .name(SECURITY_HEADER_USERNAME)
+                .type(SecurityScheme.Type.APIKEY)
+                .in(SecurityScheme.In.HEADER);
+        Map<String, SecurityScheme> securitySchemes = new HashMap<>();
+        securitySchemes.put(SECURITY_HEADER_TOKEN, token);
+        securitySchemes.put(SECURITY_HEADER_USERNAME, username);
+        components.setSecuritySchemes(securitySchemes);
+        List<SecurityRequirement> securityRequirements = new ArrayList<>();
+        securityRequirements.add(new SecurityRequirement().addList(SECURITY_HEADER_TOKEN));
+        securityRequirements.add(new SecurityRequirement().addList(SECURITY_HEADER_USERNAME));
         return new OpenAPI()
                 .components(components)
                 .info(new Info()
@@ -56,25 +81,26 @@ public class WebConfigurer implements WebMvcConfigurer {
                                 .url("http://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Documentation")
-                        .url("https://www.jianshu.com/nb/41542276"));
+                        .url("https://www.jianshu.com/nb/41542276"))
+                .security(securityRequirements);
     }
 
     /**
      * 添加全局的请求头参数
      */
-    @Bean
-    public OpenApiCustomiser customerGlobalHeaderOpenApiCustomiser() {
-        return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
-                .forEach(operation -> {
-                    String summary = operation.getSummary();
-                    if(summary != null){
-                        if(!summary.equals("Logs user into the system"))
-                            operation.addParametersItem(new HeaderParameter().$ref("#/components/parameters/username"))
-                                    .addParametersItem(new HeaderParameter().$ref("#/components/parameters/token"));
-                    }else{
-                        operation.addParametersItem(new HeaderParameter().$ref("#/components/parameters/username"))
-                                .addParametersItem(new HeaderParameter().$ref("#/components/parameters/token"));
-                    }
-                });
-    }
+//    @Bean
+//    public OpenApiCustomiser customerGlobalHeaderOpenApiCustomiser() {
+//        return openApi -> openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream())
+//                .forEach(operation -> {
+//                    String summary = operation.getSummary();
+//                    if(summary != null){
+//                        if(!summary.equals("Logs user into the system"))
+//                            operation.addParametersItem(new HeaderParameter().$ref("#/components/parameters/username"))
+//                                    .addParametersItem(new HeaderParameter().$ref("#/components/parameters/token"));
+//                    }else{
+//                        operation.addParametersItem(new HeaderParameter().$ref("#/components/parameters/username"))
+//                                .addParametersItem(new HeaderParameter().$ref("#/components/parameters/token"));
+//                    }
+//                });
+//    }
 }

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +25,10 @@ public class UserController {
     private String psd = "qwertyuiop";
     @Resource
     private RedisUtil redisUtil;
+    @Value("${token-expire}")
+    private int tokenExpire;
+    @Value("${token-refresh-expire}")
+    private int tokenRefreshExpire;
 
     @Operation(summary = "Logs user into the system")
     @ApiResponses(value = {
@@ -44,8 +49,8 @@ public class UserController {
         if(username.equals(admin) && password.equals(psd)){
             Map<String, String> map = new HashMap<String, String>();
             map.put("username", username);
-            String token = JWTUtil.genToken(map, new Date(System.currentTimeMillis() + 60L* 1000L * 30L));
-            redisUtil.set(username, token, 60 * 60 * 2);
+            String token = JWTUtil.genToken(map, new Date(System.currentTimeMillis() + 60L* 1000L * tokenExpire));
+            redisUtil.set(username, token, 60L * 60 * tokenRefreshExpire);
             //封装成对象返回给客户端
             responseData.putDataValue("username", username);
             responseData.putDataValue("token", token);
